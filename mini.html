@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tower Stack</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #95d2e2; /* Pastel Blue - Light */
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      #game {
+        position: relative;
+        width: 300px;
+        height: 500px;
+        background-color: #ffbfc2; /* Pastel Pink - Light */
+        border: 2px solid #63528d; /* Pastel Purple - Medium */
+        overflow: hidden;
+        border-radius: 10px;
+      }
+
+      #stack {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 0;
+      }
+
+      .block {
+        position: absolute;
+        height: 20px;
+        background-color: #6ec7bf; /* Pastel Teal - Light */
+        border: 1px solid #326b66; /* Pastel Teal - Medium */
+        border-radius: 4px;
+      }
+
+      #moving-block {
+        position: absolute;
+        top: 20px;
+        width: 60px;
+        height: 20px;
+        background-color: #9f485f; /* Pastel Pink - Medium */
+        border-radius: 5px;
+      }
+
+      #score {
+        position: absolute;
+        top: 5px;
+        left: 10px;
+        color: #406789; /* Pastel Blue - Medium */
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .message-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(251, 199, 171, 0.8);
+        border: 1px solid #cb764c;
+        color: #c0a3e0;
+        font-size: 16px;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        z-index: 1000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <div id="stack"></div>
+      <div id="moving-block"></div>
+      <div id="score">Score: 0</div>
+    </div>
+    <script>
+      const game = document.getElementById("game");
+      const stack = document.getElementById("stack");
+      const movingBlock = document.getElementById("moving-block");
+      const scoreDisplay = document.getElementById("score");
+
+      let score = 0;
+      let movingRight = true;
+      let speed = 2;
+      let blockWidth = 60;
+      let lastBlockLeft = 120;
+      let lastBlockWidth = blockWidth;
+
+      function moveBlock() {
+        let position = parseInt(movingBlock.style.left || "0");
+        const gameWidth = game.offsetWidth;
+
+        if (movingRight) {
+          position += speed;
+          if (position + blockWidth >= gameWidth) {
+            movingRight = false;
+          }
+        } else {
+          position -= speed;
+          if (position <= 0) {
+            movingRight = true;
+          }
+        }
+
+        movingBlock.style.left = position + "px";
+        requestAnimationFrame(moveBlock);
+      }
+
+      function dropBlock() {
+        const movingLeft = parseInt(movingBlock.style.left || "0");
+        const overlap =
+          Math.min(lastBlockLeft + lastBlockWidth, movingLeft + blockWidth) -
+          Math.max(lastBlockLeft, movingLeft);
+
+        if (overlap > 0) {
+          const newBlock = document.createElement("div");
+          newBlock.className = "block";
+          newBlock.style.left = Math.max(lastBlockLeft, movingLeft) + "px";
+          newBlock.style.width = overlap + "px";
+          newBlock.style.bottom = stack.offsetHeight + "px";
+
+          stack.appendChild(newBlock);
+          stack.style.height = stack.offsetHeight + 20 + "px";
+
+          lastBlockLeft = Math.max(lastBlockLeft, movingLeft);
+          lastBlockWidth = overlap;
+          blockWidth = overlap;
+
+          score++;
+          scoreDisplay.innerText = "Score: " + score;
+          speed += 0.1;
+
+          const gameHeight = game.offsetHeight;
+
+          if (stack.offsetHeight + 20 >= gameHeight) {
+            showMessage(
+              "Congratulations! You have reached the top! Score: " + score
+            );
+          }
+
+          movingBlock.style.width = blockWidth + "px";
+          movingBlock.style.left = "0px";
+          movingBlock.style.top = parseInt(movingBlock.style.top) - 20 + "px";
+        } else {
+          showMessage("Game Over! Your final score is: " + score);
+        }
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space" || e.code === "ArrowDown" || e.code === "KeyS") {
+          dropBlock();
+        }
+      });
+
+      document.addEventListener("click", dropBlock);
+
+      function showMessage(message) {
+        const messageBox = document.createElement("div");
+        messageBox.className = "message-box";
+        messageBox.innerText = message;
+
+        document.body.appendChild(messageBox);
+
+        setTimeout(() => {
+          document.body.removeChild(messageBox);
+          restartGame();
+        }, 3000);
+      }
+
+      function restartGame() {
+        score = 0;
+        scoreDisplay.innerText = "Score: 0";
+        stack.innerHTML = "";
+        blockWidth = 60;
+        lastBlockLeft = 120;
+        lastBlockWidth = blockWidth;
+        movingBlock.style.width = blockWidth + "px";
+        movingBlock.style.left = "10px";
+        movingBlock.style.top = "400px";
+        speed = 1;
+
+        initGame();
+      }
+
+      function initGame() {
+        stack.clear;
+        const initialBlock = document.createElement("div");
+        initialBlock.className = "block";
+        initialBlock.style.left = lastBlockLeft + "px";
+        initialBlock.style.width = lastBlockWidth + "px";
+        initialBlock.style.bottom = "0px";
+        stack.appendChild(initialBlock);
+        stack.style.height = "20px";
+        movingBlock.style.left = "10px";
+        movingBlock.style.width = blockWidth + "px";
+        movingBlock.style.top = "400px";
+        moveBlock();
+      }
+
+      initGame();
+    </script>
+  </body>
+</html>

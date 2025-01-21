@@ -68,9 +68,7 @@ function dropBlock() {
     const gameHeight = game.offsetHeight;
 
     if (stack.offsetHeight + 20 >= gameHeight) {
-      alert("Congratulations! You have reached the top! Score: " + score);
-      location.reload();
-      return;
+      showMessage("Congratulations! You have reached the top! Score: " + score);
     }
 
     // reset the moving block (why make a new one when you can reuse the old one?)
@@ -81,8 +79,7 @@ function dropBlock() {
     movingBlock.style.left = "0px";
     movingBlock.style.top = parseInt(movingBlock.style.top) - 20 + "px";
   } else {
-    alert("Game Over! Your final score is: " + score);
-    location.reload();
+    showMessage("Game Over! Your final score is: " + score);
   }
 }
 
@@ -98,7 +95,46 @@ document.addEventListener("keydown", (e) => {
 
 document.addEventListener("click", dropBlock);
 
+function showMessage(message) {
+  const messageBox = document.createElement("div");
+  messageBox.className = "message-box";
+  messageBox.innerText = message;
+
+  document.body.appendChild(messageBox);
+
+  // remove after 3 seconds
+  setTimeout(() => {
+    document.body.removeChild(messageBox);
+    restartGame();
+    location.reload();
+  }, 3000);
+}
+
+function restartGame() {
+  score = 0;
+  scoreDisplay.innerText = "Score: 0";
+  stack.innerHTML = ""; // cleared stack
+  blockWidth = 60;
+  lastBlockLeft = 120;
+  lastBlockWidth = blockWidth;
+  movingBlock.style.width = blockWidth + "px";
+  movingBlock.style.left = "10px";
+  movingBlock.style.top = "400px";
+  speed = 1;
+
+  initGame();
+}
+
 function initGame() {
+  // initial block for helping the player to align the blocks
+  const initialBlock = document.createElement("div");
+  initialBlock.className = "block";
+  initialBlock.style.left = lastBlockLeft + "px";
+  initialBlock.style.width = lastBlockWidth + "px";
+  initialBlock.style.bottom = "0px";
+  stack.appendChild(initialBlock);
+  stack.style.height = "20px";
+
   movingBlock.style.left = "10px";
   movingBlock.style.width = blockWidth + "px";
   movingBlock.style.top = "400px";

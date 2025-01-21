@@ -51,3 +51,18 @@ body {
   font-size: 16px;
   font-weight: bold;
 }
+
+.message-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(251, 199, 171, 0.8);
+  border: 1px solid #cb764c;
+  color: #c0a3e0;
+  font-size: 16px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 1000;
+}
