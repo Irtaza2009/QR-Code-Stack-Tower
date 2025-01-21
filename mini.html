@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tower Stack</title>
+    <title>StackByte</title>
     <style>
       body {
         margin: 0;
@@ -11,9 +11,16 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         height: 100vh;
         background-color: #95d2e2; /* Pastel Blue - Light */
         font-family: "Courier New", Courier, monospace;
+      }
+
+      h1 {
+        font-size: 36px;
+        color: #406789; /* Pastel Blue - Medium */
+        margin: 20px;
       }
 
       #game {
@@ -24,6 +31,7 @@
         border: 2px solid #63528d; /* Pastel Purple - Medium */
         overflow: hidden;
         border-radius: 10px;
+        margin-bottom: 20px;
       }
 
       #stack {
@@ -73,14 +81,33 @@
         text-align: center;
         z-index: 1000;
       }
+
+      footer {
+        text-align: center;
+        font-size: 14px;
+        margin-top: 20px;
+        color: #406789; /* Pastel Blue - Medium */
+      }
+
+      footer a {
+        color: #63528d; /* Pastel Purple - Medium */
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
+    <h1>StackByte</h1>
     <div id="game">
       <div id="stack"></div>
       <div id="moving-block"></div>
       <div id="score">Score: 0</div>
     </div>
+
     <script>
       const game = document.getElementById("game");
       const stack = document.getElementById("stack");
@@ -207,5 +234,12 @@
 
       initGame();
     </script>
+
+    <footer>
+      Made by
+      <a href="https://irtaza.xyz/portfolio" target="_blank">Irtaza</a> |
+      <a href="https://github.com/Irtaza2009" target="_blank">GitHub</a> | ©
+      2025
+    </footer>
   </body>
 </html>

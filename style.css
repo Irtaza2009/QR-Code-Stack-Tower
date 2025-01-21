@@ -4,6 +4,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
   background-color: #95d2e2; /* Pastel Blue - Light */
   font-family: "Courier New", Courier, monospace;
@@ -65,4 +66,27 @@ body {
   border-radius: 10px;
   text-align: center;
   z-index: 1000;
+}
+
+footer {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 20px;
+  color: #406789; /* Pastel Blue - Medium */
+}
+
+footer a {
+  color: #63528d; /* Pastel Purple - Medium */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 36px;
+  color: #406789; /* Pastel Blue - Medium */
+  margin: 20px;
 }
